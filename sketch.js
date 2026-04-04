@@ -48,20 +48,24 @@ function draw() {
       else{
         cat[catCurrent].move();
         if(catCurrent + 1 < cat.length && !cat[catCurrent + 1].atPodium()){
-  cat[catCurrent + 1].move();
-}
+          cat[catCurrent + 1].move();
+        }
       }
       if(cat[catCurrent].offScreen()){
         catCurrent++;
         timer = 0;
         timeFinish = false;
       }
-    
-  
   }
   //Cats display
   for(let i = 0; i <  cat.length; i++)   {
     cat[i].display();
-    
   }
+  //Coffee Cup
+  fill(255);
+  rect(370, 540, 10, 20);
+  noFill();
+  stroke(255);
+  
+  arc(384, 550, 10, 10, 45, 30);
 }
