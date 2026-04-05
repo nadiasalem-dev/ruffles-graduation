@@ -1,20 +1,24 @@
-class Cat{
-  constructor(x, y, col){
-        this.x = x;
-        this.y = 580;
-        this.col = col;
+class Cat {
+  constructor(x, y, col) {
+    this.x = x;
+    this.y = y;
+    this.col = col;
   }
-  atPodium(){
+
+  atPodium() {
     return this.x > 350;
   }
-  move(){
-     this.x++;
+
+  move() {
+    this.x++;
   }
-  display(){
+
+  display() {
     fill(this.col);
-    ellipse(this.x, this.y, 20, 20);
+    ellipse(sx * this.x, sy * this.y, sx * 20, sy * 20);
   }
-  offScreen(){
+
+  offScreen() {
     return this.x >= 740;
   }
 }
