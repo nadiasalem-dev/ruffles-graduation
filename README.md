@@ -1,5 +1,7 @@
 # ruffles-graduation
 A p5.js graduation ceremony animation featuring Ruffles the cat, accessible design elements, and a few hidden surprises.
+Live Demo:
+https://nadiasalem-dev.github.io/ruffles-graduation/
 # Ruffles Graduation Ceremony (p5.js)
 
 This project is a small animated graduation ceremony built with p5.js.
