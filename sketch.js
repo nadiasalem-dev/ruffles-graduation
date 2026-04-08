@@ -1,45 +1,55 @@
+let bannerH, stageY, podiumX, podiumY, podiumW, podiumH;
+let catStartX, catY, podiumStopX, offscreenX;
 let timeFinish = false;
 let rufflesX = 20;
 let catCurrent = 0;
 let timer = 0;
+let pauseTime = 120;
 let cat = [];
 let compie;
-let sx;
-let sy;
 function setup() {
-createCanvas(windowWidth, windowWidth * (6 / 7));
-  for (let i = 0; i < 18; i++) cat[i] = new Cat(10, 580, color(155, 255, 255));
+  createCanvas(windowWidth, windowHeight);
+  podiumW = width * 0.14;
+  podiumH = height * 0.07;
+  podiumX = width * 0.44;
+  podiumY = height * 0.805;
+  catStartX = width * 0.015;
+  catY = podiumY + podiumH * 1.2;
+  for (let i = 0; i < 18; i++)
+    cat[i] = new Cat(catStartX, catY, color(155, 255, 255));
   angleMode(DEGREES);
-  sx = width/700;
-  sy = height/600;
+  bannerH = height * 0.17;
+
+
+  podiumStopX = width * .5;
+  offScreenX = width + 40;
+  stageY = height * 0.67;  
 }
 function preload() {
   compie = loadImage("compie.png");
 }
-function windowResized() {
-  resizeCanvas(windowWidth, windowWidth * (6 / 7));
-}
+
 function draw() {
   background(235, 240, 245);
   //Banner
   fill(40, 70, 120);
-  rect(0, 0, sx* 700, sy *100);
+  rect(0, 0, width, bannerH);
   //Words on Banner
-  textSize(30);
+  textSize(bannerH * .3);
   textAlign(CENTER);
   fill(255);
-  text("Catty University, Naptime", sx * 350, sy * 40);
-  textSize(29);
-  text("Graduation 2026", sx * 350, sy * 80);
+  text("Catty University, Naptime", width/2, bannerH * .4);
+  textSize(bannerH * .29);
+  text("Graduation 2026", width/2, bannerH * .8);
   //Stage
   noStroke();
   fill(160, 120, 70);
-  rect(0, sx * 400, sy * 700, sy * 200);
+  rect(0, stageY, width, height -stageY);
   //Display laptop computer as presenter
-  image(compie, sx * 270, sx * 440, sy * 160, sy * 150);
+  image(compie, podiumX-podiumW * .3, podiumY-podiumH *1.8, podiumW * 1.6, podiumH * 3);
   // Podium
   fill(40, 70, 120);
-  rect(sx * 300, sx * 525, sy * 100, sy * 40);
+  rect(podiumX, podiumY, podiumW, podiumH);
   //Cats Movement
   if (catCurrent < cat.length) {
     if (!cat[catCurrent].atPodium()) {
@@ -49,7 +59,7 @@ function draw() {
       if (catCurrent + 1 < cat.length && !cat[catCurrent + 1].atPodium())
         cat[catCurrent + 1].move();
 
-      if (timer === 100) {
+      if (timer === pauseTime) {
         timeFinish = true;
       }
     } else {
@@ -70,9 +80,9 @@ function draw() {
   }
   //Coffee Cup
   fill(255);
-  rect(sx * 370, sx * 540, sy * 10, sy * 20);
+  rect(podiumX + podiumW * .7, podiumY + podiumH * .35, podiumW * .14, podiumH *.5);
   noFill();
   stroke(255);
-
-  arc(sx * 384, sy *  550, 10, 10, 45, 30);
+  //coffee handle
+  arc(podiumX + podiumW * .84, podiumY + podiumH * .6, podiumW * .12, podiumH * .45, 300, 600);
 }
