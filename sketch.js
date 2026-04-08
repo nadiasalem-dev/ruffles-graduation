@@ -8,7 +8,7 @@ let pauseTime = 120;
 let cat = [];
 let compie;
 function setup() {
-  createCanvas(windowWidth, windowHeight);
+  createCanvas(windowWidth, windowWidth * 6/7);
   podiumW = width * 0.14;
   podiumH = height * 0.07;
   podiumX = width * 0.44;
