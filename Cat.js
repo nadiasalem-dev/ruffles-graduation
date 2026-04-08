@@ -6,19 +6,21 @@ class Cat {
   }
 
   atPodium() {
-    return this.x > 350;
+    return this.x > podiumStopX;
   }
 
   move() {
-    this.x++;
+    this.x = this.x + 1.5;
   }
 
   display() {
     fill(this.col);
-    ellipse(sx * this.x, sy * this.y, sx * 20, sy * 20);
+    if(!this.offScreen()){
+    ellipse(this.x, this.y, 20, 20);
+    }
   }
 
   offScreen() {
-    return this.x >= 740;
+    return this.x >= offScreenX;
   }
 }
