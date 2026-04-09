@@ -7,8 +7,12 @@ let timer = 0;
 let pauseTime = 120;
 let cat = [];
 let compie;
+let audienceY;
+let audienceRows = 10;
+let audienceGap;
+let adj;
 function setup() {
-  createCanvas(windowWidth, windowWidth * 6/7);
+  createCanvas(windowWidth, windowHeight);
   podiumW = width * 0.14;
   podiumH = height * 0.07;
   podiumX = width * 0.44;
@@ -22,8 +26,10 @@ function setup() {
 
 
   podiumStopX = width * .5;
-  offScreenX = width + 40;
-  stageY = height * 0.67;  
+  offScreenX = width + podiumW;
+  stageY = height * 0.67;
+  audienceY = stageY - height * .03;
+audienceGap = (stageY - bannerH * 1.1) / audienceRows;
 }
 function preload() {
   compie = loadImage("compie.png");
@@ -85,4 +91,17 @@ function draw() {
   stroke(255);
   //coffee handle
   arc(podiumX + podiumW * .84, podiumY + podiumH * .6, podiumW * .12, podiumH * .45, 300, 600);
+  noStroke();
+  for(let j = 0; j < audienceRows; j++){
+  for(let i = 10; i > 0; i--){
+    if(j % 2 === 0){
+      adj = 0;
+    }
+    else{
+      adj = width * .02;
+    }
+  fill(255, 0, 0);
+  circle(width * (105-i* 10)/100 + adj, audienceY -j *audienceGap, 20 );
+  }
+  }
 }
