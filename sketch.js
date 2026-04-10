@@ -11,8 +11,9 @@ let audienceY;
 let audienceRows = 10;
 let audienceGap;
 let adj;
+let sceneWidth = min(windowWidth, windowHeight * 7 / 6);
 function setup() {
-  let sceneWidth = min(windowWidth, windowHeight * 7 / 6);
+  canvas(screenWidth, screenWidth * 6/7);
   podiumW = width * 0.14;
   podiumH = height * 0.07;
   podiumX = width * 0.44;
