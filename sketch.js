@@ -12,7 +12,7 @@ let audienceRows = 10;
 let audienceGap;
 let adj;
 function setup() {
-  createCanvas(windowWidth, windowWidth * 6/7);
+  let sceneWidth = min(windowWidth, windowHeight * 7 / 6);
   podiumW = width * 0.14;
   podiumH = height * 0.07;
   podiumX = width * 0.44;
