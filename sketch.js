@@ -13,7 +13,7 @@ let audienceGap;
 let adj;
 let sceneWidth; 
 function setup() {
-sceneWidth = Math.min(windowWidth, windowHeight * 7 / 6);
+sceneWidth = Math.min(windowWidth * .98, windowHeight * 7 / 6);
 createCanvas(sceneWidth, sceneWidth * 6 / 7);
   podiumW = width * 0.14;
   podiumH = height * 0.07;
