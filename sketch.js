@@ -106,4 +106,12 @@ function draw() {
   circle(width * (105-i* 10)/100 + adj, audienceY -j *audienceGap, 20 );
   }
   }
+  fill(0);
+textSize(16);
+textAlign(LEFT);
+text("width: " + width, 20, 20);
+text("height: " + height, 20, 40);
+text("sceneWidth: " + sceneWidth, 20, 60);
+text("windowWidth: " + windowWidth, 20, 80);
+text("windowHeight: " + windowHeight, 20, 100);
 }
