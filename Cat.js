@@ -1,26 +1,83 @@
 class Cat {
-  constructor(x, y, col) {
+  constructor(x, y, col, img, spriteIndex, state) {
     this.x = x;
     this.y = y;
     this.col = col;
+    this.img = img;
+    this.spriteIndex = spriteIndex;
+    this.state = state;
+    this.pauseTimer = 0;
+    this.speed = 1.5;
+    this.award = false;
+    this.awardType = "";
+    this.awardException = "- With Disctinction close enough";
+    this.name = names[this.spriteIndex];
   }
 
   atPodium() {
-    return this.x > podiumStopX;
+    return this.x + 45 >= podiumX + podiumW / 2;
   }
 
   move() {
-    this.x = this.x + 1.5;
+    this.x += this.speed;
   }
 
   display() {
-    fill(this.col);
-    if(!this.offScreen()){
-    ellipse(this.x, this.y, 20, 20);
+    let frame = catFrames[this.spriteIndex];
+    image(
+      this.img,
+      this.x,
+      this.y,
+      65,
+      90,
+      frame.sx,
+      frame.sy,
+      frame.sw,
+      frame.sh
+    );
+    this.awardType = "";
+    if (this.spriteIndex === 17) this.awardType = this.awardException;
+    else if (this.award) {
+      this.awardType = "- Distinction Award";
     }
+    if (this.state === "pausing") this.displayAward();
   }
 
   offScreen() {
-    return this.x >= offScreenX;
+    return this.x >= offScreenX + 80;
+  }
+  update() {
+    if (this.state === "waiting") {
+      return;
+    }
+
+    if (this.state === "walkingToPodium") {
+      this.move();
+
+      if (this.atPodium()) {
+        // Snap exactly to center once
+        this.x = podiumX + podiumW / 2 - 45;
+        this.state = "pausing";
+        this.pauseTimer = 0;
+      }
+    } else if (this.state === "pausing") {
+      this.pauseTimer++;
+
+      if (this.pauseTimer >= pauseTime) {
+        this.state = "leaving";
+      }
+    } else if (this.state === "leaving") {
+      this.move();
+
+      if (this.offScreen()) {
+        this.state = "done";
+      }
+    }
+  }
+  displayAward() {
+    textSize(bannerH * 0.28);
+    textAlign(CENTER);
+    fill(255);
+    text(this.name + " " + this.awardType, width / 2, bannerH * 0.85);
   }
 }
