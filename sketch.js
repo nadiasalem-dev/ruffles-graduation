@@ -53,7 +53,7 @@ function setup() {
   catDrawW = width * .09;
   catDrawH = catDrawW *1.38;
 stageY = height * 0.7;
-catY = stageY + (height - stageY) * 1.05- catDrawH;
+catY = stageY + (height - stageY) - catDrawH;
   for (let i = 0; i < 18; i++)
     cat[i] = new Cat(-100, catY, color(155, 255, 255), catImages, i, "waiting");
   for(let i = 0; i < 18; i++){
