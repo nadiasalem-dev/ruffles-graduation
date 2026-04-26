@@ -33,7 +33,7 @@ class Cat {
       frame.sx,
       frame.sy,
       frame.sw,
-      frame.sh -40
+      frame.sh -80
     );
     this.awardType = "";
     if (this.spriteIndex === 17) this.awardType = this.awardException;
