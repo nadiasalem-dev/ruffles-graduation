@@ -52,7 +52,7 @@ function setup() {
   catStartX = width * 0.015;
   catDrawW = width * .09;
   catDrawH = catDrawW *1.38
-  catY = podiumY + podiumH * 1.2;
+  catY = podiumY + podiumH*3-catDrawH;
   for (let i = 0; i < 18; i++)
     cat[i] = new Cat(-100, catY, color(155, 255, 255), catImages, i, "waiting");
   for(let i = 0; i < 18; i++){
