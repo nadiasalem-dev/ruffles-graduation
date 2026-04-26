@@ -15,7 +15,7 @@ class Cat {
   }
 
   atPodium() {
-    return this.x + 45 >= podiumX + podiumW / 2;
+    return this.x + catDrawW / 2 >= podiumX + podiumW / 2;
   }
 
   move() {
@@ -28,8 +28,8 @@ class Cat {
       this.img,
       this.x,
       this.y,
-      65,
-      90,
+      catDrawW,
+      catDrawH,
       frame.sx,
       frame.sy,
       frame.sw,
@@ -56,7 +56,7 @@ class Cat {
 
       if (this.atPodium()) {
         // Snap exactly to center once
-        this.x = podiumX + podiumW / 2 - 45;
+        this.x = podiumX + podiumW / 2 - catDrawW/2;
         this.state = "pausing";
         this.pauseTimer = 0;
       }
