@@ -13,7 +13,7 @@ let audienceRows = 10;
 let audienceGap;
 let adj;
 let sceneWidth
-let catAudienceSize = 20;
+let catAudienceSize;
 let zoeyRow;
 let zoeySeat;
 let zoeyImg;
@@ -51,8 +51,9 @@ function setup() {
   podiumY = height * 0.805;
   catStartX = width * 0.015;
   catDrawW = width * .09;
-  catDrawH = catDrawW *1.38
-  catY = podiumY + podiumH*3-catDrawH;
+  catDrawH = catDrawW *1.38;
+stageY = height * 0.7;
+catY = stageY + (height - stageY) * 1.05- catDrawH;
   for (let i = 0; i < 18; i++)
     cat[i] = new Cat(-100, catY, color(155, 255, 255), catImages, i, "waiting");
   for(let i = 0; i < 18; i++){
@@ -66,10 +67,10 @@ function setup() {
   cat[0].x = catStartX;
   angleMode(DEGREES);
   bannerH = height * 0.17;
-
+  catAudienceSize = width * .025;
   podiumStopX = podiumX + podiumW / 2;
   offScreenX = width + podiumW;
-  stageY = height * 0.67;
+
   audienceY = stageY - height * 0.03;
   audienceGap = (stageY - bannerH * 1.1) / audienceRows;
   zoeyRow = floor(random(audienceRows));
