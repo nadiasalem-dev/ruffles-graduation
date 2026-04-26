@@ -39,6 +39,8 @@ let catFrames = [
   { sx: 1030, sy: 615, sw: 220, sh: 300 },
   { sx: 1230, sy: 615, sw: 220, sh: 300 }
 ];
+let catDrawW;
+let catDrawH;
 let names = ["Ada", "Byte", "Bit", "Pixel", "Kernel", "Stack", "Cache", "Vector", "Pointer", "Cipher", "Syntax", "Loop", "Logic", "Turing", "Hopper", "Linus", "Pascal", "Ruffles"];
 function setup() {
   sceneWidth = Math.min(windowWidth, (windowHeight * 7) / 6);
@@ -48,6 +50,8 @@ function setup() {
   podiumX = width * 0.44;
   podiumY = height * 0.805;
   catStartX = width * 0.015;
+  catDrawW = width * .09;
+  catDrawH = catDrawW *1.38
   catY = podiumY + podiumH * 1.2;
   for (let i = 0; i < 18; i++)
     cat[i] = new Cat(-100, catY, color(155, 255, 255), catImages, i, "waiting");
