@@ -12,53 +12,72 @@ let audienceY;
 let audienceRows = 10;
 let audienceGap;
 let adj;
-let sceneWidth
+let sceneWidth;
 let catAudienceSize;
 let zoeyRow;
 let zoeySeat;
 let zoeyImg;
 let catFrames = [
-  { sx: 20,   sy: 45,  sw: 220, sh: 370 },
-  { sx: 275,  sy: 45,  sw: 220, sh: 380 },
-  { sx: 530,  sy: 45,  sw: 220, sh: 370 },
-  { sx: 785,  sy: 45,  sw: 220, sh: 370 },
-  { sx: 1030, sy: 45,  sw: 220, sh: 370 },
-  { sx: 1230, sy: 45,  sw: 220, sh: 370 },
+  { sx: 20, sy: 45, sw: 220, sh: 370 },
+  { sx: 275, sy: 45, sw: 220, sh: 370 },
+  { sx: 530, sy: 45, sw: 220, sh: 370 },
+  { sx: 785, sy: 45, sw: 220, sh: 370 },
+  { sx: 1030, sy: 45, sw: 220, sh: 370 },
+  { sx: 1230, sy: 45, sw: 220, sh: 370 },
 
-  { sx: 20,   sy: 360, sw: 220, sh: 300 },
-  { sx: 275,  sy: 360, sw: 220, sh: 300 },
-  { sx: 530,  sy: 360, sw: 220, sh: 300 },
-  { sx: 785,  sy: 360, sw: 220, sh: 300 },
-  { sx: 1030, sy: 360, sw: 220, sh: 300 },
-  { sx: 1230, sy: 360, sw: 220, sh: 300 },
+ { sx: 20,   sy: 360, sw: 220, sh: 300 },
+{ sx: 275,  sy: 360, sw: 220, sh: 300 },
+{ sx: 530,  sy: 360, sw: 220, sh: 300 },
+{ sx: 785,  sy: 360, sw: 220, sh: 300 },
+{ sx: 1030, sy: 360, sw: 220, sh: 300 },
+{ sx: 1230, sy: 360, sw: 220, sh: 300 },
 
-  { sx: 20,   sy: 615, sw: 220, sh: 300 },
-  { sx: 275,  sy: 615, sw: 220, sh: 300 },
-  { sx: 530,  sy: 615, sw: 220, sh: 300 },
-  { sx: 785,  sy: 615, sw: 220, sh: 300 },
+  { sx: 20, sy: 615, sw: 220, sh: 300 },
+  { sx: 275, sy: 615, sw: 220, sh: 300 },
+  { sx: 530, sy: 615, sw: 220, sh: 300 },
+  { sx: 785, sy: 615, sw: 220, sh: 300 },
   { sx: 1030, sy: 615, sw: 220, sh: 300 },
-  { sx: 1230, sy: 615, sw: 220, sh: 300 }
+  { sx: 1230, sy: 615, sw: 220, sh: 300 },
 ];
 let catDrawW;
 let catDrawH;
-let names = ["Ada", "Byte", "Bit", "Pixel", "Kernel", "Stack", "Cache", "Vector", "Pointer", "Cipher", "Syntax", "Loop", "Logic", "Turing", "Hopper", "Linus", "Pascal", "Ruffles"];
+let names = [
+  "Ada",
+  "Byte",
+  "Bit",
+  "Pixel",
+  "Kernel",
+  "Stack",
+  "Cache",
+  "Vector",
+  "Pointer",
+  "Cipher",
+  "Syntax",
+  "Loop",
+  "Logic",
+  "Turing",
+  "Hopper",
+  "Linus",
+  "Pascal",
+  "Ruffles",
+];
 function setup() {
   sceneWidth = Math.min(windowWidth, (windowHeight * 7) / 6);
   createCanvas(sceneWidth, (sceneWidth * 6) / 7);
   podiumW = width * 0.14;
   podiumH = height * 0.07;
   podiumX = width * 0.44;
-  podiumY = height * 0.805;
+  podiumY = height * 0.79;
   catStartX = width * 0.015;
-  catDrawW = width * .09;
-  catDrawH = catDrawW *1.38;
-stageY = height * 0.7;
-catY = stageY + (height - stageY) - catDrawH;
+  catDrawW = width * 0.085;
+  catDrawH = catDrawW * 1.3;
+  stageY = height * 0.7;
+  catY = height - catDrawH;
   for (let i = 0; i < 18; i++)
     cat[i] = new Cat(-100, catY, color(155, 255, 255), catImages, i, "waiting");
-  for(let i = 0; i < 18; i++){
+  for (let i = 0; i < 18; i++) {
     let ran = ceil(random(2));
-    if(ran === 1){
+    if (ran === 1) {
       cat[i].award = true;
     }
   }
@@ -67,7 +86,7 @@ catY = stageY + (height - stageY) - catDrawH;
   cat[0].x = catStartX;
   angleMode(DEGREES);
   bannerH = height * 0.17;
-  catAudienceSize = width * .025;
+  catAudienceSize = width * 0.025;
   podiumStopX = podiumX + podiumW / 2;
   offScreenX = width + podiumW;
 
@@ -75,7 +94,6 @@ catY = stageY + (height - stageY) - catDrawH;
   audienceGap = (stageY - bannerH * 1.1) / audienceRows;
   zoeyRow = floor(random(audienceRows));
   zoeySeat = ceil(random(10));
-
 }
 function preload() {
   compie = loadImage("compie.png");
@@ -111,12 +129,12 @@ function draw() {
   fill(40, 70, 120);
   rect(podiumX, podiumY, podiumW, podiumH);
   //cat movement
-  if(cat[cat.length-1].state === "leaving"){
-    cat[cat.length-1].speed = 1.0;
+  if (cat[cat.length - 1].state === "leaving") {
+    cat[cat.length - 1].speed = 1.0;
   }
   if (catCurrent < cat.length) {
     let current = cat[catCurrent];
-  
+
     // Update all cats
     for (let i = 0; i < cat.length; i++) {
       let c = cat[i];
@@ -172,7 +190,6 @@ function draw() {
       xPosition = (width * (105 - i * 10)) / 100 + adj;
       yPosition = audienceY - j * audienceGap;
       if (j === zoeyRow && i === zoeySeat) {
-        
         drawZoey(xPosition, yPosition, catAudienceSize * 1.3);
       } else {
         drawCatSilhouette(xPosition, yPosition, catAudienceSize);
