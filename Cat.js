@@ -21,27 +21,46 @@ class Cat {
   move() {
     this.x += this.speed;
   }
+display() {
+  let frame = catFrames[this.spriteIndex];
 
-  display() {
-    let frame = catFrames[this.spriteIndex];
-    image(
-      this.img,
-      this.x,
-      this.y,
-      catDrawW,
-      catDrawH,
-      frame.sx,
-      frame.sy,
-      frame.sw,
-      frame.sh -80
-    );
-    this.awardType = "";
-    if (this.spriteIndex === 17) this.awardType = this.awardException;
-    else if (this.award) {
-      this.awardType = "- Distinction Award";
-    }
-    if (this.state === "pausing") this.displayAward();
+  // Remove hat space
+  let cropH = frame.sh - 80;
+
+  // Reference sprite height (row 1)
+  let baseHeight = 370;
+
+  // Scale based on actual sprite height
+  let scale = frame.sh / baseHeight;
+
+  let drawH = catDrawH * scale;
+  let drawW = catDrawW;
+  
+  let y = height - drawH;
+if (this.spriteIndex >= 6 ) {
+  const rowOffset = height * .01;
+  y -= rowOffset;
+}
+  image(
+    this.img,
+    this.x,
+    y,
+    drawW,
+    drawH,
+    frame.sx,
+    frame.sy,
+    frame.sw,
+    cropH
+  );
+
+  this.awardType = "";
+  if (this.spriteIndex === 17) this.awardType = this.awardException;
+  else if (this.award) {
+    this.awardType = "- Distinction Award";
   }
+
+  if (this.state === "pausing") this.displayAward();
+}
 
   offScreen() {
     return this.x >= offScreenX + 80;
