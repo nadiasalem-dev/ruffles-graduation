@@ -2,8 +2,8 @@
 
 A p5.js graduation ceremony animation featuring Ruffles the cat, accessible design elements, and a few hidden surprises.
 
-Live Demo:  
-https://nadiasalem-dev.github.io/ruffles-graduation/
+**Live Demo:**  
+[View the ceremony here](https://nadiasalem-dev.github.io/ruffles-graduation/)
 
 Tip: Look closely at the audience. You might find someone unexpected.
 
