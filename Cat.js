@@ -1,5 +1,5 @@
 class Cat {
-  constructor(x, y, col, img, spriteIndex, state) {
+  constructor(x, y, col, img, spriteIndex, state, isRuffles) {
     this.x = x;
     this.y = y;
     this.col = col;
@@ -12,6 +12,7 @@ class Cat {
     this.awardType = "";
     this.awardException = "- With Disctinction close enough";
     this.name = names[this.spriteIndex];
+    this.isRuffles = isRuffles;
   }
 
   atPodium() {
@@ -21,46 +22,49 @@ class Cat {
   move() {
     this.x += this.speed;
   }
-display() {
-  let frame = catFrames[this.spriteIndex];
+  display() {
+    let frame = catFrames[this.spriteIndex];
 
-  // Remove hat space
-  let cropH = frame.sh - 80;
+    // Remove hat space
+    let cropH = frame.sh - 80;
 
-  // Reference sprite height (row 1)
-  let baseHeight = 370;
+    // Reference sprite height (row 1)
+    let baseHeight = 370;
 
-  // Scale based on actual sprite height
-  let scale = frame.sh / baseHeight;
+    // Scale based on actual sprite height
+    let scale = frame.sh / baseHeight;
 
-  let drawH = catDrawH * scale;
-  let drawW = catDrawW;
-  
-  let y = height - drawH;
-if (this.spriteIndex >= 6 ) {
-  const rowOffset = height * .01;
-  y -= rowOffset;
-}
-  image(
-    this.img,
-    this.x,
-    y,
-    drawW,
-    drawH,
-    frame.sx,
-    frame.sy,
-    frame.sw,
-    cropH
-  );
+    let drawH = catDrawH * scale;
+    let drawW = catDrawW;
 
-  this.awardType = "";
-  if (this.spriteIndex === 17) this.awardType = this.awardException;
-  else if (this.award) {
-    this.awardType = "- Distinction Award";
+    let y = height - drawH;
+    if (this.spriteIndex >= 6) {
+      const rowOffset = height * 0.01;
+      y -= rowOffset;
+    }
+    image(
+      this.img,
+      this.x,
+      y,
+      drawW,
+      drawH,
+      frame.sx,
+      frame.sy,
+      frame.sw,
+      cropH
+    );
+    // draw shadow on stage floor
+    noStroke();
+    fill(0, 0, 0, 60); // soft transparent shadow
+    ellipse(this.x + drawW / 2, height - 8, drawW * 0.8, 12);
+    this.awardType = "";
+    if (this.isRuffles) this.awardType = this.awardException;
+    else if (this.award) {
+      this.awardType = "- Distinction Award";
+    }
+
+    if (this.state === "pausing") this.displayAward();
   }
-
-  if (this.state === "pausing") this.displayAward();
-}
 
   offScreen() {
     return this.x >= offScreenX + 80;
@@ -75,15 +79,20 @@ if (this.spriteIndex >= 6 ) {
 
       if (this.atPodium()) {
         // Snap exactly to center once
-        this.x = podiumX + podiumW / 2 - catDrawW/2;
+        this.x = podiumX + podiumW / 2 - catDrawW / 2;
         this.state = "pausing";
         this.pauseTimer = 0;
+        this.playDistinction();
       }
     } else if (this.state === "pausing") {
       this.pauseTimer++;
 
-      if (this.pauseTimer >= pauseTime) {
+      if (this.pauseTimer >= pauseTime && !this.isRuffles) {
         this.state = "leaving";
+      } else if (this.pauseTimer >= pauseTime + 15 && this.isRuffles) {
+        compieShow = true;
+        this.state = "rufflesRefuseToLeave";
+        //compieShow = true;
       }
     } else if (this.state === "leaving") {
       this.move();
@@ -91,6 +100,8 @@ if (this.spriteIndex >= 6 ) {
       if (this.offScreen()) {
         this.state = "done";
       }
+    } else if (this.state === "rufflesRefuseToLeave") {
+      //this.state = "leaving";
     }
   }
   displayAward() {
@@ -98,5 +109,87 @@ if (this.spriteIndex >= 6 ) {
     textAlign(CENTER);
     fill(255);
     text(this.name + " " + this.awardType, width / 2, bannerH * 0.85);
+  }
+  playDistinction() {
+    if (this.awardType != "") {
+      distinctionSound.play();
+    }
+  }
+  displayRosie() {
+    if (this.state == "walking to Ruffles") {
+      let rosieScale = 1.5;
+      let rosieW = catDrawW * rosieScale;
+      let rosieH = catDrawH * rosieScale;
+      let RosieY = height - rosieH;
+
+      image(
+        RosieSprite,
+        this.x,
+        RosieY,
+        rosieW - 25,
+        rosieH + 35,
+        0,
+        0,
+        RosieSprite.width / 4,
+        RosieSprite.height
+      );
+      this.move();
+    }
+    else if(this.state === "raise arms"){
+      let rosieScale = 1.5;
+      let rosieW = catDrawW * rosieScale;
+      let rosieH = catDrawH * rosieScale;
+      let RosieY = height - rosieH;
+
+      image(
+        RosieSprite,
+        this.x,
+        RosieY,
+        rosieW - 25,
+        rosieH + 35,
+        RosieSprite.width/4,
+        0,
+        RosieSprite.width / 4,
+        RosieSprite.height
+      );
+    }
+        else if(this.state === "arms at middle"){
+      let rosieScale = 1.5;
+      let rosieW = catDrawW * rosieScale;
+      let rosieH = catDrawH * rosieScale;
+      let RosieY = height - rosieH;
+
+      image(
+        RosieSprite,
+        this.x,
+        RosieY,
+        rosieW - 25,
+        rosieH + 35,
+        RosieSprite.width/4 * 2,
+        0,
+        RosieSprite.width / 4,
+        RosieSprite.height
+      );
+    }
+        else if(this.state === "push"){
+      let rosieScale = 1.5;
+      let rosieW = catDrawW * rosieScale;
+      let rosieH = catDrawH * rosieScale;
+      let RosieY = height - rosieH;
+
+      image(
+        RosieSprite,
+        this.x,
+        RosieY,
+        rosieW - 25,
+        rosieH + 35,
+        RosieSprite.width/4 * 3,
+        0,
+        RosieSprite.width / 4,
+        RosieSprite.height
+      );
+    
+    this.move();
+  }
   }
 }
