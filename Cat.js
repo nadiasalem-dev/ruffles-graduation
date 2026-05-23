@@ -119,8 +119,9 @@ class Cat {
       let rosieScale = 1.5;
       let rosieW = catDrawW * rosieScale;
       let rosieH = catDrawH * rosieScale;
-      let rosieDrawH = rosieH + 35;
-    let RosieY = height - rosieDrawH + 35;
+      let rosieDrawH = rosieH + height * 0.04;
+let rosieFloorOffset = height * .055;
+let RosieY = height - rosieDrawH + rosieFloorOffset;
     if (this.state == "walking to Ruffles") {
    
       
