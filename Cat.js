@@ -116,75 +116,73 @@ class Cat {
     }
   }
   displayRosie() {
-      let rosieScale = 1.5;
-      let rosieW = catDrawW * rosieScale;
-      let rosieH = catDrawH * rosieScale;
-      let rosieDrawH = rosieH + height * 0.04;
-let rosieFloorOffset = height * .055;
-let RosieY = height - rosieDrawH + rosieFloorOffset;
-    if (this.state == "walking to Ruffles") {
-   
-      
+  let rosieScale = 1.5;
 
-      image(
-        RosieSprite,
-        this.x,
-        RosieY,
-        rosieW - 25,
-        rosieDrawH,
-        0,
-        0,
-        RosieSprite.width / 4,
-        RosieSprite.height
-      );
-      this.move();
-    }
-    else if(this.state === "raise arms"){
- 
+  let rosieW = catDrawW * rosieScale;
+  let rosieH = catDrawH * rosieScale;
 
-      image(
-        RosieSprite,
-        this.x,
-        RosieY,
-        rosieW - 25,
-        rosieDrawH,
-        RosieSprite.width/4,
-        0,
-        RosieSprite.width / 4,
-        RosieSprite.height
-      );
-    }
-        else if(this.state === "arms at middle"){
- 
+  let rosieDrawW = rosieW - catDrawW * 0.18;
+  let rosieDrawH = rosieH + height * 0.04;
 
-      image(
-        RosieSprite,
-        this.x,
-        RosieY,
-        rosieW - 25,
-        rosieDrawH,
-        RosieSprite.width/4 * 2,
-        0,
-        RosieSprite.width / 4,
-        RosieSprite.height
-      );
-    }
-        else if(this.state === "push"){
-    
+  let rosieFloorOffset = height * 0.055;
+  let RosieY = height - rosieDrawH + rosieFloorOffset;
 
-      image(
-        RosieSprite,
-        this.x,
-        RosieY,
-        rosieW - 25,
-        rosieDrawH,
-        RosieSprite.width/4 * 3,
-        0,
-        RosieSprite.width / 4,
-        RosieSprite.height
-      );
-    
+  let frameW = RosieSprite.width / 4;
+  let frameH = RosieSprite.height;
+
+  if (this.state == "walking to Ruffles") {
+    image(
+      RosieSprite,
+      this.x,
+      RosieY,
+      rosieDrawW,
+      rosieDrawH,
+      0,
+      0,
+      frameW,
+      frameH
+    );
+
+    this.move();
+  } else if (this.state === "raise arms") {
+    image(
+      RosieSprite,
+      this.x,
+      RosieY,
+      rosieDrawW,
+      rosieDrawH,
+      frameW,
+      0,
+      frameW,
+      frameH
+    );
+  } else if (this.state === "arms at middle") {
+    image(
+      RosieSprite,
+      this.x,
+      RosieY,
+      rosieDrawW,
+      rosieDrawH,
+      frameW * 2,
+      0,
+      frameW,
+      frameH
+    );
+  } else if (this.state === "push") {
+    image(
+      RosieSprite,
+      this.x,
+      RosieY,
+      rosieDrawW,
+      rosieDrawH,
+      frameW * 3,
+      0,
+      frameW,
+      frameH
+    );
+
     this.move();
   }
+
   }
 }
