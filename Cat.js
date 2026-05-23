@@ -116,11 +116,13 @@ class Cat {
     }
   }
   displayRosie() {
-    if (this.state == "walking to Ruffles") {
       let rosieScale = 1.5;
       let rosieW = catDrawW * rosieScale;
       let rosieH = catDrawH * rosieScale;
-      let RosieY = height - rosieH;
+    let RosieY = stageY + (height-stageY) - rosieH;
+    if (this.state == "walking to Ruffles") {
+   
+      
 
       image(
         RosieSprite,
@@ -136,10 +138,7 @@ class Cat {
       this.move();
     }
     else if(this.state === "raise arms"){
-      let rosieScale = 1.5;
-      let rosieW = catDrawW * rosieScale;
-      let rosieH = catDrawH * rosieScale;
-      let RosieY = height - rosieH;
+ 
 
       image(
         RosieSprite,
@@ -154,10 +153,7 @@ class Cat {
       );
     }
         else if(this.state === "arms at middle"){
-      let rosieScale = 1.5;
-      let rosieW = catDrawW * rosieScale;
-      let rosieH = catDrawH * rosieScale;
-      let RosieY = height - rosieH;
+ 
 
       image(
         RosieSprite,
@@ -172,10 +168,7 @@ class Cat {
       );
     }
         else if(this.state === "push"){
-      let rosieScale = 1.5;
-      let rosieW = catDrawW * rosieScale;
-      let rosieH = catDrawH * rosieScale;
-      let RosieY = height - rosieH;
+    
 
       image(
         RosieSprite,
