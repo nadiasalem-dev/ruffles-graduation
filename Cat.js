@@ -22,26 +22,24 @@ class Cat {
   move() {
     this.x += this.speed;
   }
+
   display() {
     let frame = catFrames[this.spriteIndex];
 
-    // Remove hat space
     let cropH = frame.sh - 80;
-
-    // Reference sprite height (row 1)
     let baseHeight = 370;
-
-    // Scale based on actual sprite height
     let scale = frame.sh / baseHeight;
 
     let drawH = catDrawH * scale;
     let drawW = catDrawW;
 
     let y = height - drawH;
+
     if (this.spriteIndex >= 6) {
       const rowOffset = height * 0.01;
       y -= rowOffset;
     }
+
     image(
       this.img,
       this.x,
@@ -53,22 +51,28 @@ class Cat {
       frame.sw,
       cropH
     );
-    // draw shadow on stage floor
+
     noStroke();
-    fill(0, 0, 0, 60); // soft transparent shadow
+    fill(0, 0, 0, 60);
     ellipse(this.x + drawW / 2, height - 8, drawW * 0.8, 12);
+
     this.awardType = "";
-    if (this.isRuffles) this.awardType = this.awardException;
-    else if (this.award) {
+
+    if (this.isRuffles) {
+      this.awardType = this.awardException;
+    } else if (this.award) {
       this.awardType = "- Distinction Award";
     }
 
-    if (this.state === "pausing") this.displayAward();
+    if (this.state === "pausing") {
+      this.displayAward();
+    }
   }
 
   offScreen() {
     return this.x >= offScreenX + 80;
   }
+
   update() {
     if (this.state === "waiting") {
       return;
@@ -78,7 +82,6 @@ class Cat {
       this.move();
 
       if (this.atPodium()) {
-        // Snap exactly to center once
         this.x = podiumX + podiumW / 2 - catDrawW / 2;
         this.state = "pausing";
         this.pauseTimer = 0;
@@ -92,7 +95,6 @@ class Cat {
       } else if (this.pauseTimer >= pauseTime + 15 && this.isRuffles) {
         compieShow = true;
         this.state = "rufflesRefuseToLeave";
-        //compieShow = true;
       }
     } else if (this.state === "leaving") {
       this.move();
@@ -101,88 +103,67 @@ class Cat {
         this.state = "done";
       }
     } else if (this.state === "rufflesRefuseToLeave") {
-      //this.state = "leaving";
+      // Ruffles waits here until Rosie starts pushing.
     }
   }
+
   displayAward() {
     textSize(bannerH * 0.28);
     textAlign(CENTER);
     fill(255);
     text(this.name + " " + this.awardType, width / 2, bannerH * 0.85);
   }
+
   playDistinction() {
     if (this.awardType != "") {
       distinctionSound.play();
     }
   }
+
   displayRosie() {
-  let rosieScale = 1.5;
+    let frameW = RosieSprite.width / 4;
+    let frameH = RosieSprite.height;
 
-  let rosieW = catDrawW * rosieScale;
-  let rosieH = catDrawH * rosieScale;
+    let rosieScale = 1.5;
 
-  let rosieDrawW = rosieW - catDrawW * 0.18;
-  let rosieDrawH = rosieH + height * 0.04;
+    let rosieDrawW = catDrawW * .99;
+    let rosieDrawH = catDrawH * rosieScale;
 
-  let rosieFloorOffset = height * 0.055;
-  let RosieY = height - rosieDrawH + rosieFloorOffset;
+    // Slight proportional height boost so Rosie matches the graduates better.
+    rosieDrawH += catDrawH * 0.35;
 
-  let frameW = RosieSprite.width / 4;
-  let frameH = RosieSprite.height;
+    // Keep Rosie on the same floor line across screen sizes.
+    let rosieFloorOffset = catDrawH * 0.45;
+    let RosieY = height - rosieDrawH + rosieFloorOffset;
 
-  if (this.state == "walking to Ruffles") {
+    let sourceX = 0;
+
+    if (this.state === "walking to Ruffles") {
+      sourceX = 0;
+    } else if (this.state === "raise arms") {
+      sourceX = frameW;
+    } else if (this.state === "arms at middle") {
+      sourceX = frameW * 2;
+    } else if (this.state === "push") {
+      sourceX = frameW * 3;
+    } else {
+      return;
+    }
+
     image(
       RosieSprite,
       this.x,
       RosieY,
       rosieDrawW,
       rosieDrawH,
-      0,
-      0,
-      frameW,
-      frameH
-    );
-
-    this.move();
-  } else if (this.state === "raise arms") {
-    image(
-      RosieSprite,
-      this.x,
-      RosieY,
-      rosieDrawW,
-      rosieDrawH,
-      frameW,
-      0,
-      frameW,
-      frameH
-    );
-  } else if (this.state === "arms at middle") {
-    image(
-      RosieSprite,
-      this.x,
-      RosieY,
-      rosieDrawW,
-      rosieDrawH,
-      frameW * 2,
-      0,
-      frameW,
-      frameH
-    );
-  } else if (this.state === "push") {
-    image(
-      RosieSprite,
-      this.x,
-      RosieY,
-      rosieDrawW,
-      rosieDrawH,
-      frameW * 3,
+      sourceX,
       0,
       frameW,
       frameH
     );
 
-    this.move();
-  }
-
+    if (this.state === "walking to Ruffles" || this.state === "push") {
+      this.move();
+    }
   }
 }
