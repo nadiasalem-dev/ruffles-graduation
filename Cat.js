@@ -119,7 +119,8 @@ class Cat {
       let rosieScale = 1.5;
       let rosieW = catDrawW * rosieScale;
       let rosieH = catDrawH * rosieScale;
-    let RosieY = stageY + (height-stageY) - rosieH;
+      let rosieDrawH = rosieH + 35;
+    let RosieY = height - rosieDrawH + 35;
     if (this.state == "walking to Ruffles") {
    
       
@@ -129,7 +130,7 @@ class Cat {
         this.x,
         RosieY,
         rosieW - 25,
-        rosieH + 35,
+        rosieDrawH,
         0,
         0,
         RosieSprite.width / 4,
@@ -145,7 +146,7 @@ class Cat {
         this.x,
         RosieY,
         rosieW - 25,
-        rosieH + 35,
+        rosieDrawH,
         RosieSprite.width/4,
         0,
         RosieSprite.width / 4,
@@ -160,7 +161,7 @@ class Cat {
         this.x,
         RosieY,
         rosieW - 25,
-        rosieH + 35,
+        rosieDrawH,
         RosieSprite.width/4 * 2,
         0,
         RosieSprite.width / 4,
@@ -175,7 +176,7 @@ class Cat {
         this.x,
         RosieY,
         rosieW - 25,
-        rosieH + 35,
+        rosieDrawH,
         RosieSprite.width/4 * 3,
         0,
         RosieSprite.width / 4,
