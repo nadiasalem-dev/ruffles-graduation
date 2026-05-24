@@ -126,7 +126,7 @@ class Cat {
 
     let rosieScale = 1.5;
 
-    let rosieDrawW = catDrawW * .99;
+    let rosieDrawW = catDrawW * .97;
     let rosieDrawH = catDrawH * rosieScale;
 
     // Slight proportional height boost so Rosie matches the graduates better.
