@@ -26,6 +26,7 @@ let armsUp = false;
 let pushRuffles = false;
 let rosieTimer = 0;
 
+
 let catFrames = [
   { sx: 20, sy: 45, sw: 220, sh: 370 },
   { sx: 275, sy: 45, sw: 220, sh: 370 },
@@ -204,7 +205,7 @@ if (compieShow) {
 
     if (
       cat[cat.length - 1].x >=
-      cat[cat.length - 2].x - catDrawW * 0.8
+      cat[cat.length - 2].x - catDrawW * 0.85
     ) {
 
       reachedRuffles = true;
