@@ -4,7 +4,7 @@ let timeFinish = false;
 let rufflesX = 20;
 let catCurrent = 0;
 let timer = 0;
-let pauseTime = 20;
+let pauseTime = 80;
 let cat = [];
 let compie;
 let catImages;
@@ -16,16 +16,26 @@ let sceneWidth;
 let catAudienceSize;
 let zoeyRow;
 let zoeySeat;
+let zoeyX;
+let zoeyY;
+let zoeySize
 let zoeyImg;
 let RosieSprite;
 let distinctionSound;
+let closeEnough;
 let compieShow = false;
 let reachedRuffles = false;
 let moveArms = false;
 let armsUp = false;
 let pushRuffles = false;
 let rosieTimer = 0;
-
+let nameSound = [];
+let majorIn;
+let majors = [];
+let steams = [];
+let debugMode = true;
+let catDebug = 0;
+let rufflesPeakChange;
 
 let catFrames = [
   { sx: 20, sy: 45, sw: 220, sh: 370 },
@@ -73,6 +83,7 @@ let names = [
   "Pascal",
   "Ruffles",
 ];
+let rosieArm;
 
 function setup() {
   sceneWidth = Math.min(windowWidth, (windowHeight * 7) / 6);
@@ -110,6 +121,15 @@ function setup() {
     "waiting",
     false
   );
+  rufflesPeaks = new Cat(
+    offscreenX,
+    catY,
+    color(155, 255, 255),
+    rufflesPeak,
+    cat.length,
+    "waiting",
+    false
+  );
 
   cat[cat.length - 2].isRuffles = true;
 
@@ -120,7 +140,8 @@ function setup() {
     }
   }
 
-  cat[0].state = "walkingToPodium";
+cat[catDebug].state = "walkingToPodium";
+cat[catDebug].x = catStartX;
   cat[cat.length - 2].speed = 2.5;
   cat[0].x = catStartX;
 
@@ -135,14 +156,64 @@ function setup() {
   audienceGap = (stageY - bannerH * 1.1) / audienceRows;
   zoeyRow = floor(random(audienceRows));
   zoeySeat = ceil(random(10));
+  for(let i = 0; i < 16; i++){
+    steams.push({
+      yOffset: random(0, 40),
+      noiseOffset: random(1000),
+      size: random(4,9),
+      speed: random(.3, .7)
+    });
+  }
+  rufflesPeakChange = false;
 }
 
 function preload() {
   compie = loadImage("images/compie.png");
   catImages = loadImage("images/spriteGrad.png");
   zoeyImg = loadImage("images/Zoey.png");
-  distinctionSound = loadSound("audio/distinction_award.wav");
+  rosieArm = loadImage("images/rosieArm.png");
+  rufflesPeak = loadImage("images/rufflespeak.png");
+  distinctionSound = loadSound("audio/awards/distinction_award.wav");
   RosieSprite = loadImage("images/RosieSprite.png");
+  closeEnough = loadSound("audio/awards/close_enough.wav");
+  nameSound[0] = loadSound("audio/names/ada.wav");
+  nameSound[1] = loadSound("audio/names/byte.wav");
+  nameSound[2] = loadSound("audio/names/bit.wav");
+  nameSound[3] = loadSound("audio/names/pixel.wav");
+  nameSound[4] = loadSound("audio/names/kernal.wav");
+  nameSound[5] = loadSound("audio/names/stack.wav");
+  nameSound[6] = loadSound("audio/names/cache.wav");
+  nameSound[7] = loadSound("audio/names/vector.wav");
+  nameSound[8] = loadSound("audio/names/pointer.wav");
+  nameSound[9] = loadSound("audio/names/cipher.wav");
+  nameSound[10] = loadSound("audio/names/syntax.wav");
+  nameSound[11] = loadSound("audio/names/loop.wav");
+  nameSound[12] = loadSound("audio/names/logic.wav");
+  nameSound[13] = loadSound("audio/names/turing.wav");
+  nameSound[14] = loadSound("audio/names/hopper.wav");
+  nameSound[15] = loadSound("audio/names/linus.wav");
+  nameSound[16] = loadSound("audio/names/pascal.wav");
+  nameSound[17] = loadSound("audio/names/ruffles.wav");
+  majorIn = loadSound("audio/majors/majorIn.wav");
+  majors[0] = loadSound("audio/majors/appliedRodentPersuit.wav");
+  majors[1] = loadSound("audio/majors/humanSeatingRetention.wav");
+  majors[2] = loadSound("audio/majors/yarnTheory.wav");
+  majors[3] = loadSound("audio/majors/advancedNappingStudies.wav");
+  majors[4] = loadSound("audio/majors/avianObservationStudies.wav");
+  majors[5] = loadSound("audio/majors/appliedGravityResearch.wav");
+  majors[6] = loadSound("audio/majors/solarComfortStudies.wav");
+  majors[7] = loadSound("audio/majors/strategicCardboardArchitecture.wav");
+    majors[8] = loadSound("audio/majors/humanBehavioralModification.wav");
+    majors[9] = loadSound("audio/majors/emergencyResponseAttractionStudies.wav");
+  majors[10] = loadSound("audio/majors/catNapping.wav");
+  majors[11] = loadSound("audio/majors/bedJumping.wav");
+  majors[12] = loadSound("audio/majors/restroomSurveilances.wav");
+  majors[13] = loadSound("audio/majors/advancedHousehold.wav");
+  majors[14] = loadSound("audio/majors/humanFood.wav");
+  majors[15] = loadSound("audio/majors/hideAndSeek.wav");
+  majors[16] = loadSound("audio/majors/purrTheory.wav");
+  majors[17] = loadSound("audio/majors/humanTraining.wav");
+  
 }
 
 function draw() {
@@ -179,7 +250,7 @@ function draw() {
   }
 
   if (catCurrent < cat.length) {
-    for (let i = 0; i < cat.length; i++) {
+    for (let i = catDebug; i < cat.length; i++) {
       let c = cat[i];
 
       if (c.state !== "waiting" && c.state !== "done") {
@@ -187,7 +258,7 @@ function draw() {
       }
 
       if (
-        c.state === "pausing" &&
+        c.state === "leaving" && c.audioDone &&
         i + 1 < cat.length &&
         cat[i + 1].state === "waiting" &&
         i + 1 !== cat.length - 1
@@ -242,41 +313,64 @@ if (compieShow) {
 
 }
 
- /* if (
-    cat[cat.length - 1].x >
-    cat[cat.length - 2].x - catDrawW * 0.8
-  ) {
-    cat[cat.length - 2].state = "leaving";
-    cat[cat.length - 1].speed =
-      cat[cat.length - 2].speed;
-  }*/
  
+if (cat[cat.length - 1].offScreen()) {
+  if (!rufflesPeakChange) {
+    rufflesPeaks.x = width;
+    rufflesPeaks.y = catY - 20;
+    rufflesPeaks.speed = -1;
+    rufflesPeakChange = true;
+  }
+
+  rufflesPeaks.move();
+
  
-  for (let i = 0; i < cat.length; i++) {
+
+  image(rufflesPeak, rufflesPeaks.x, rufflesPeaks.y, catDrawW, catDrawH);
+ if (rufflesPeaks.x <= width - 48) {
+    rufflesPeaks.speed = 0;
+    //displayRosiesArm();
+  }
+}
+ 
+  for (let i = catDebug; i < cat.length; i++) {
     if (i === cat.length - 1) {
     } else if (cat[i].state !== "waiting") {
       cat[i].display();
     }
   }
+  //Draw Mug and mug shadow
+  fill(0, 0, 0, 80);
 
-  fill(255);
-  rect(
-    podiumX + podiumW * 0.7,
-    podiumY + podiumH * 0.35,
-    podiumW * 0.14,
-    podiumH * 0.5
-  );
-
-  noFill();
-  stroke(255);
-  arc(
-    podiumX + podiumW * 0.84,
-    podiumY + podiumH * 0.6,
-    podiumW * 0.12,
-    podiumH * 0.45,
-    300,
-    600
-  );
+// Compie's red coaster
+noStroke();
+fill(255, 0, 0);
+ellipse(
+  podiumX + podiumW * 0.87,
+  podiumY + podiumH * 0.29,
+  podiumW * 0.28,
+  podiumH * 0.10
+);
+// Compie's mug
+fill(255);
+rect(
+  podiumX + podiumW * 0.8,
+  podiumY - podiumH * .25,
+  podiumW * 0.14,
+  podiumH * 0.5,
+  4
+);
+drawSteam();
+noFill();
+stroke(255);
+arc(
+  podiumX + podiumW * 0.94,
+  podiumY,
+  podiumW * 0.12,
+  podiumH * 0.45,
+  300,
+  600
+);
   noStroke();
 
   for (let j = 0; j < audienceRows; j++) {
@@ -292,6 +386,9 @@ if (compieShow) {
 
       if (j === zoeyRow && i === zoeySeat) {
         drawZoey(xPosition, yPosition, catAudienceSize * 1.3);
+        zoeyX = xPosition;
+        zoeyY = yPosition;
+        zoeySize = catAudienceSize * 1.3;
       } else {
         drawCatSilhouette(xPosition, yPosition, catAudienceSize);
       }
@@ -355,4 +452,41 @@ function drawZoey(x, y, size) {
   image(zoeyImg, x, y, size, size);
 
   pop();
+}
+function drawSteam() {
+  let mugX = podiumX + podiumW * 0.87;
+  let mugY = podiumY - podiumH * 0.25;
+
+  noStroke();
+
+  for (let puff of steams) {
+    let drift = map(noise(puff.noiseOffset), 0, 1, -8, 8);
+    let x = mugX + drift;
+    let y = mugY - puff.yOffset;
+
+    fill(255, 255, 255, 90);
+    circle(x, y, puff.size);
+
+    puff.yOffset += puff.speed;
+    puff.noiseOffset += 0.01;
+
+    if (puff.yOffset > 55) {
+      puff.yOffset = 0;
+      puff.size = random(4, 9);
+      puff.speed = random(0.3, 0.7);
+    }
+  }
+}
+function mouseClicked(){
+  if(debugMode){
+    zoeyCenter = zoeySize/2;
+    if(abs(mouseX - zoeyX) < zoeyCenter && abs(mouseY - zoeyY) < zoeyCenter){
+      catDebug = 17;
+      cat[catDebug].state = "walkingToPodium";
+    }
+  }
+}
+function displayRosiesArm(){
+  image(rosieArm, rufflesPeaks.x, rufflesPeaks.y, catDrawW, catDrawH);
+  
 }
