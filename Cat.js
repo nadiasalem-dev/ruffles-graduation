@@ -13,6 +13,8 @@ class Cat {
     this.awardException = "- With Disctinction close enough";
     this.name = names[this.spriteIndex];
     this.isRuffles = isRuffles;
+    this.audioDone = false;
+    this.audioStarted = false;
   }
 
   atPodium() {
@@ -36,21 +38,10 @@ class Cat {
     let y = height - drawH;
 
     if (this.spriteIndex >= 6) {
-      const rowOffset = height * 0.01;
-      y -= rowOffset;
+      y -= height * 0.01;
     }
 
-    image(
-      this.img,
-      this.x,
-      y,
-      drawW,
-      drawH,
-      frame.sx,
-      frame.sy,
-      frame.sw,
-      cropH
-    );
+    image(this.img, this.x, y, drawW, drawH, frame.sx, frame.sy, frame.sw, cropH);
 
     noStroke();
     fill(0, 0, 0, 60);
@@ -74,9 +65,7 @@ class Cat {
   }
 
   update() {
-    if (this.state === "waiting") {
-      return;
-    }
+    if (this.state === "waiting") return;
 
     if (this.state === "walkingToPodium") {
       this.move();
@@ -85,14 +74,20 @@ class Cat {
         this.x = podiumX + podiumW / 2 - catDrawW / 2;
         this.state = "pausing";
         this.pauseTimer = 0;
-        this.playDistinction();
+        this.audioDone = false;
+        this.audioStarted = false;
       }
     } else if (this.state === "pausing") {
       this.pauseTimer++;
 
-      if (this.pauseTimer >= pauseTime && !this.isRuffles) {
+      if (!this.audioStarted) {
+        this.audioStarted = true;
+        this.playCeremonyAudio();
+      }
+
+      if (this.audioDone && !this.isRuffles) {
         this.state = "leaving";
-      } else if (this.pauseTimer >= pauseTime + 15 && this.isRuffles) {
+      } else if (this.audioDone && this.isRuffles) {
         compieShow = true;
         this.state = "rufflesRefuseToLeave";
       }
@@ -114,9 +109,50 @@ class Cat {
     text(this.name + " " + this.awardType, width / 2, bannerH * 0.85);
   }
 
-  playDistinction() {
-    if (this.awardType != "") {
-      distinctionSound.play();
+  playCeremonyAudio() {
+    let name = nameSound[this.spriteIndex];
+
+    if (name) {
+      name.play();
+      name.onended(() => {
+        this.playAwardAudio();
+      });
+    } else {
+      this.playAwardAudio();
+    }
+  }
+
+  playAwardAudio() {
+    if (this.awardType !== "") {
+      let sound = this.isRuffles ? closeEnough : distinctionSound;
+
+      sound.play();
+      sound.onended(() => {
+        this.playMajorIntro();
+      });
+    } else {
+      this.playMajorIntro();
+    }
+  }
+
+  playMajorIntro() {
+    majorIn.play();
+
+    majorIn.onended(() => {
+      this.playMajorAudio();
+    });
+  }
+
+  playMajorAudio() {
+    let major = majors[this.spriteIndex];
+
+    if (major) {
+      major.play();
+      major.onended(() => {
+        this.audioDone = true;
+      });
+    } else {
+      this.audioDone = true;
     }
   }
 
@@ -125,14 +161,11 @@ class Cat {
     let frameH = RosieSprite.height;
 
     let rosieScale = 1.5;
-
-    let rosieDrawW = catDrawW * .97;
+    let rosieDrawW = catDrawW * 0.97;
     let rosieDrawH = catDrawH * rosieScale;
 
-    // Slight proportional height boost so Rosie matches the graduates better.
     rosieDrawH += catDrawH * 0.35;
 
-    // Keep Rosie on the same floor line across screen sizes.
     let rosieFloorOffset = catDrawH * 0.45;
     let RosieY = height - rosieDrawH + rosieFloorOffset;
 
